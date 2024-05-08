@@ -36,10 +36,26 @@ var billboardProgram;
 var time = 0.0;
 
 var wh = document.getElementById('heightID');
-var waterHeight=1.0;
+var waterHeight = Number(wh.value);
 wh.addEventListener("input", function(evt) {
 	if(doneLoading==true){
 		waterHeight=Number(wh.value);
+	}
+}, false);
+
+var ts = document.getElementById('stepID');
+var timeStep = Number(ts.value);
+ts.addEventListener("input", function(evt) {
+	if(doneLoading==true){
+		timeStep=Number(ts.value);
+	}
+}, false);
+
+var l = document.getElementById('lambdaID');
+var lambda = Number(l.value);
+l.addEventListener("input", function(evt) {
+	if(doneLoading==true){
+		lambda=Number(l.value);
 	}
 }, false);
 
@@ -153,7 +169,7 @@ function drawScene() {
 			gl.colorMask(true, true, true, true);
 			gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 		} else {
-			time += 0.1;
+			time += timeStep;
 			renderingFcn();
 		}
 	}
@@ -238,6 +254,7 @@ function renderBillboard(){
 	// You can either use the uniform location here or you can use your preprocessed uniform location in the program.
 	gl.uniform1f(billboardProgram.heightUniformLocation, waterHeight);
 	gl.uniform1f(billboardProgram.timeUniformLocation, time);
+	gl.uniform1f(billboardProgram.lambdaUniformLocation, lambda);
 
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
 }

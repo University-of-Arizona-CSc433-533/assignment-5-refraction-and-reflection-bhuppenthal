@@ -8,7 +8,8 @@ class BillboardProgram{
 		worldViewProjectionUniformLocation,
 		lightDirectionUniformLocation,
 		heightUniformLocation,
-		timeUniformLocation){
+		timeUniformLocation,
+		lambdaUniformLocation){
 		this.program=program;
 		this.positionLocationAttrib=positionLocationAttrib;
 		this.normalLocationAttrib=normalLocationAttrib;
@@ -18,6 +19,7 @@ class BillboardProgram{
 		this.lightDirectionUniformLocation=lightDirectionUniformLocation;
 		this.heightUniformLocation=heightUniformLocation;
 		this.timeUniformLocation=timeUniformLocation;
+		this.lambdaUniformLocation=lambdaUniformLocation;
 	}
 }
 
@@ -59,16 +61,37 @@ function programBillboard(){
         uniform sampler2D u_texture;
 		uniform float u_height;
 		uniform float u_time;
+		uniform float u_lambda;
 
         void main() {
 			float x = v_texcoord[0]-0.5;
 			float y = v_texcoord[1]-0.5;
 			float rho = sqrt(x*x + y*y);
 			float theta = atan(y,x);
-			if (rho >= 0.25) {
+
+			// normal
+			float h_prime = u_height * sin((rho + u_time)/u_lambda);
+			vec3 n = vec3(1.0, 0.0, -1.0/h_prime);
+			mat3 R = mat3(cos(theta), sin(theta), 0.0,
+						  -sin(theta), cos(theta), 0.0,
+						  0.0, 0.0, 1.0);
+			n = R * n;
+			n = normalize(n);
+
+			// light direction
+			vec3 d = vec3(0.0, 0.0, -1.0);
+
+			// update texcoord location.
+			vec3 term1 = (d - n * dot(d, n))/1.3;
+			vec3 term2 = n * sqrt(1.0 - (1.0 - pow(dot(d, n), 2.0))/pow(1.3, 2.0));
+			vec3 t = term1 + term2;
+
+			vec2 tc = vec2(v_texcoord[0] + t[0], v_texcoord[1] + t[1]);
+
+			if (tc[0] < 0.0 || tc[0] > 1.0 || tc[1] < 0.0 || tc[1] > 1.0) {
 				gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 			} else {
-				gl_FragColor = texture2D(u_texture, v_texcoord);
+				gl_FragColor = texture2D(u_texture, tc);
 			}
         }`;
 
@@ -86,6 +109,7 @@ function programBillboard(){
 	lightDirectionUniformLocation = gl.getUniformLocation(program, "u_lightDirection");
 	heightUniformLocation = gl.getUniformLocation(program, "u_height");
 	timeUniformLocation = gl.getUniformLocation(program, "u_time");
+	lambdaUniformLocation = gl.getUniformLocation(program, "u_lambda");
 	
 	//Optional TODO: You can preprocess required Uniforms to avoid searching for uniforms when rendering.
 	billboardProgram=new BillboardProgram(program,
@@ -96,7 +120,8 @@ function programBillboard(){
 		worldViewProjectionUniformLocation,
 		lightDirectionUniformLocation,
 		heightUniformLocation,
-		timeUniformLocation);
+		timeUniformLocation,
+		lambdaUniformLocation);
 }
 
 function makeBillboardBuffers(){
@@ -125,7 +150,7 @@ function makeBillboardBuffers(){
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, imageData);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.generateMipmap(gl.TEXTURE_2D);
+    // gl.generateMipmap(gl.TEXTURE_2D);
   
     billboard.setBuffers(
 		billboardPositionBuffer,
