@@ -2,31 +2,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WebGL - A05</title>
-<link type="text/css" href="style.css" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>WebGL - A05</title>
+  <link type="text/css" href="style.css" rel="stylesheet"/>
 </head>
+
 <body>
-<div class="description">
-Select one texture, one obj file, and one scene.
-</div>
-<div>
-    <input type="file" id="load_scene" multiple>
-</div>
-<div>
-	<canvas id="dummy_canvas" width="1" height="1"></canvas>
-</div> 
+  <div>
+      <input type="file" id="load_scene" multiple>
+  </div>
 
-<canvas id="canvas"></canvas>
+  <div>
+    <canvas id="dummy_canvas" width="1" height="1"></canvas>
+  </div> 
 
-<div class="wrapper">
-  <p align="center">
-  <input type="range" id="whID" name="pexp"
-         value="0.5" min="0.01" max="2.0" step="0.01" style="width:100%" >
-  <p align="center">Water height: <span id="whLabelID"></span></p>
-  </p>
-</div>
+  <div class="wrapper">
+    <p align="center">
+    <input type="range" id="heightID" name="height"
+          value="1.0" min="0" max="2.0" step="0.01" style="width:100%" >
+    <p align="center">Water height: <span id="whLabelID"></span></p>
+    </p>
+  </div>
+
+  <canvas id="canvas"></canvas>
 
 </body>
 <!--
@@ -36,10 +35,14 @@ See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
 and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
-<script src="webgl-utils.js"></script>
+<script src="a05.js"></script>
+<script src="Image.js"></script>
 <script src="m4.js"></script>
-<script src="a06.js"></script>
-<script type="text/javascript" src="png.js"></script>
+<script src="math.js"></script>
+<script src="png.js"></script>
+<script src="scene.js"></script>
+<script src="shaders.js"></script>
+<script src="webgl-utils.js"></script>
 </html>
 
 

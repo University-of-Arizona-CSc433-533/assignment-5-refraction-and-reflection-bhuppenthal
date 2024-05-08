@@ -1,11 +1,5 @@
-Template code for A04
-------------
-
-Author: Your name [youremail@email.arizona.edu]
-Date: April 15, 2023
-
-**PLEASE UPDATE THIS README**
-
+Author: Brenda Huppenthal [bhuppenthal@arizona.edu]
+Date: April 10, 2024
 
 Included files:
 * materials/ -- a folder with one image in 2^n format and one scene with one billboard.

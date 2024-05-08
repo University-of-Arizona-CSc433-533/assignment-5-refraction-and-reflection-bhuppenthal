@@ -1,0 +1,18 @@
+{
+    "eye": [0, 0, 10],
+    "lookat": [0, 0, 0],
+    "up": [0, 1, 0],
+    "fov_angle": 60,
+	"near": 1,
+	"far": 30,
+    "DefaultColor":[0.8, 0.8, 0.8],
+    "SunLocation":[-2, 0.7, 7],
+    "billboard":
+    {
+        "type":"billboards",
+        "UpperLeft": [-5, 5, 0], 
+        "LowerLeft": [-5, -5, 0], 
+        "UpperRight": [5, 5, 0],
+        "filename": "f-texture.png"
+    }
+}
